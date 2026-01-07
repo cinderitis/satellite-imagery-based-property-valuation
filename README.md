@@ -40,6 +40,8 @@ set MAPBOX_TOKEN=your_token_here
 Ensure your root directory contains the necessary Excel files:
 * `train(1).xlsx` (Training data)
 * `test.xlsx` or `test2.xlsx` (Testing data)
+  
+  The training data is already preprocessed in the repository and can be directly used for training the models.
 
 ---
 
