@@ -3,16 +3,15 @@ import pandas as pd
 import os
 import time
 
+# Read API token from environment
 MAPBOX_TOKEN = os.getenv("MAPBOX_TOKEN")
 if MAPBOX_TOKEN is None:
     raise ValueError("MAPBOX_TOKEN not found. Please set it as an environment variable.")
 
-def fetch_satellite_image(lat, lon, save_path):
-    zoom = 18
-    size = "256x256"
-
+def fetch_satellite_image(lat, lon, save_path, zoom=18, size="256x256"):
+    
     if os.path.exists(save_path):
-        return
+        return  # Skip if already downloaded
 
     url = (
         f"https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/"
@@ -28,20 +27,27 @@ def fetch_satellite_image(lat, lon, save_path):
     else:
         print(f"Failed ({response.status_code}) for lat={lat}, lon={lon}")
 
-df = pd.read_excel("train(1).xlsx")
 
-os.makedirs("satellite_images", exist_ok=True)
+def fetch_images_for_dataframe(df, output_dir, sleep_time=0.2, max_images=None):
 
-for idx, row in df.head(300).iterrows():  
-    img_id = row['id']
-    save_path = f"satellite_images/{img_id}.png"
+    os.makedirs(output_dir, exist_ok=True)
 
-    fetch_satellite_image(
-        lat=row["lat"],
-        lon=row["long"],
-        save_path=save_path
-    )
+    for i, (_, row) in enumerate(df.iterrows()):
+        if max_images is not None and i >= max_images:
+            break
 
-    time.sleep(0.2)
+        img_id = row["id"]
+        save_path = os.path.join(output_dir, f"{img_id}.png")
 
-print("download done")
+        fetch_satellite_image(
+            lat=row["lat"],
+            lon=row["long"],
+            save_path=save_path
+        )
+
+        time.sleep(sleep_time)
+
+    print(f"download done at {output_dir}")
+
+
+
