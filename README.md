@@ -13,14 +13,22 @@ This project predicts housing prices using two distinct approaches: a standard *
 
 ## ⚙️ Setup & Prerequisites
 
-### 1. Install Dependencies
-Ensure you have Python installed, then run:
+### 1. Clone the Repository
+Open your terminal and clone the project to your local machine:
+
+```bash
+git clone [https://github.com/yourusername/your-repo-name.git](https://github.com/yourusername/your-repo-name.git)
+cd your-repo-name
+```
+
+### 2. Install Dependencies
+Ensure you have Python installed, then install the required libraries:
 
 ```bash
 pip install pandas numpy xgboost tensorflow opencv-python requests openpyxl
 ```
 
-### 2. Mapbox API Token (Required for Fusion Model)
+### 3. Mapbox API Token (Required for Fusion Model)
 To use the satellite imagery features (Method B), you need a Mapbox API token.
 
 1.  Sign up and get a token from [Mapbox.com](https://www.mapbox.com/).
@@ -36,12 +44,12 @@ export MAPBOX_TOKEN="your_token_here"
 set MAPBOX_TOKEN=your_token_here
 ```
 
-### 3. Input Data
+### 4. Input Data
 Ensure your root directory contains the necessary Excel files:
 * `train(1).xlsx` (Training data)
 * `test.xlsx` or `test2.xlsx` (Testing data)
-  
-  The training data is already preprocessed in the repository and can be directly used for training the models.
+
+The training data is already preprocessed in the repository and can be directly used for training the models.
 
 ---
 
@@ -88,4 +96,4 @@ This notebook handles the entire process automatically:
 
 * **Image Download Speed:** The `data_fetcher.py` script includes a small `sleep` delay to avoid hitting API rate limits. Downloading thousands of images may take time.
 * **Re-running Downloads:** The fetcher checks if an image exists before downloading. If you need to force a re-download, delete the `satellite_images/` folder.
-* **Data Matching:** The scripts use the `id` column to map spreadsheet rows to image filenames (`{id}.png`). We are only considering unique ids and duplicates are dropped during preprocess.
+* **Data Matching:** The scripts use the `id` column to map spreadsheet rows to image filenames (`{id}.png`). **Note:** We are only considering unique IDs; duplicates in the dataset are dropped during the preprocessing stage to ensure a 1-to-1 mapping between tabular data and images.
